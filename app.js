@@ -7,12 +7,20 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var testAPIRouter = require("./routes/testAPI");
+
+
+const fbAdmin = require('firebase-admin');
+const serviceAccount = require('./keys/stock-market-sim-firebase-adminsdk.json');
+
+fbAdmin.initializeApp({
+  credential: fbAdmin.credential.cert(serviceAccount)
+});
+
+
 var createSession = require("./routes/createSession");
 
 var app = express();
 
-const fbAdmin = require('firebase-admin');
-const serviceAccount = require('./keys/stock-market-sim-firebase-adminsdk.json');
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
