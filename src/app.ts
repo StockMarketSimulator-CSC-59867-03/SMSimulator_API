@@ -17,6 +17,7 @@ import IndexMiddleWare, * as indexRouter from './routes/index';
 import * as usersRouter from './routes/users';
 import * as testAPIRouter from './routes/testAPI';
 import CreateSessionController from './routes/createSession';
+import { SetupService } from './routes/setupService';
 
 
 
@@ -48,6 +49,7 @@ app.use(function(req, res, next) {
 });
 
 console.log("5");
+var setupService = new SetupService();
 
 
 // error handler
