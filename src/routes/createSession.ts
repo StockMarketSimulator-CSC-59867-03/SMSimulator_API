@@ -1,6 +1,7 @@
 import * as express from 'express';
 import { SessionDataModel } from './models/sessionData.model';
 import { SessionUserDataModel } from './models/sessionUserData.model';
+import { SetupService } from './setupService';
 const fbAdmin = require('firebase-admin');
 const db = fbAdmin.firestore();
 
@@ -8,9 +9,11 @@ const db = fbAdmin.firestore();
 class CreateSessionController {
   public path = '/';
   public router = express.Router();
+  private setupService: SetupService;
  
-  constructor() {
+  constructor(setupService: SetupService) {
     this.router.get(this.path, this.get);
+    this.setupService = setupService;
   }
  
   get = (request, response) => {
@@ -29,15 +32,38 @@ class CreateSessionController {
     }
 
     // SHOULD change this to a firestore transactions so its atomic
-    db.collection("Sessions").add(sessionData).then((doc)=>{
-      db.collection("Sessions").doc(doc.id).collection("Users").add(sessionUserData).then(()=>{
-        response.send(doc.id);
+    let batch = db.batch();
+    let sessionRef = db.collection("Sessions").doc();
+    batch.set(sessionRef, sessionData);
+
+    let userAdminRef = sessionRef.collection("Users").doc();
+    batch.set(userAdminRef, sessionUserData);
+
+    batch.commit().then(() => {
+      this.setupService.getStockDataForSymbol("MSFT", "Microsoft", (stockFields, stockHistory) => {
+        let batch = db.batch();
+
+        console.log("Created Session");
+        console.log(stockFields);
+        let stockDocRef = sessionRef.collection("Stocks").doc(stockFields["symbol"]);
+        batch.set(stockDocRef, stockFields);
+        for (let i = 0; i < 30; i++) {
+          let historyEntry = stockDocRef.collection("Stock History").doc();
+          batch.set(historyEntry, stockHistory[i]);
+        }
+
+        batch.commit().then(() => {
+          console.log("Successfully Created Session");
+        });
+
+        console.log(stockHistory);
       });
-    }).catch((err)=>{
+    }).catch((err) => {
       console.log(err);
-      response.send("Could not create session");
     });
-    
+
+
+
   }
  
 }

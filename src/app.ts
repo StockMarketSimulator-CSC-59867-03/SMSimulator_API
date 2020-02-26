@@ -24,7 +24,6 @@ import { SetupService } from './routes/setupService';
 
 var app = express();
 
-var createSessionController = new CreateSessionController();
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -32,7 +31,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
+var setupService = new SetupService();
+var createSessionController = new CreateSessionController(setupService);
 
 app.use('/', indexRouter.default);
 
@@ -49,7 +49,7 @@ app.use(function(req, res, next) {
 });
 
 console.log("5");
-var setupService = new SetupService();
+
 
 
 // error handler

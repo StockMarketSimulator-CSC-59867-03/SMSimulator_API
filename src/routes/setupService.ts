@@ -8,10 +8,10 @@ var request = require('request');
 export class SetupService {
     currentStocks = new Map();
     constructor(){
-        this.loadStockDataForSymbol("AAPL", "Apple in.");
+   
     }
 
-    loadStockDataForSymbol(symbol: string, name: string){
+    getStockDataForSymbol(symbol: string, name: string, callback: any){
         
         var url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}`;
 
@@ -25,7 +25,9 @@ export class SetupService {
             } else if (res.statusCode !== 200) {
               console.log('Status:', res.statusCode);
             } else {
-              this.parseStockData(data, symbol, name);
+              let stockField = this.parseStockData(data, symbol, name);
+              let stockHistory = this.parseStockHistory(data);
+              callback(stockField,stockHistory);
             }
         });
     }
@@ -42,7 +44,22 @@ export class SetupService {
             sector: "Tech"
         }
 
-        console.log(stockData);
+        return stockData;
+    }
+
+    parseStockHistory(data){
+
+      let historyArray = [];
+      let timeSeriesData = data["Time Series (Daily)"];
+      if (Object.keys(timeSeriesData).length >= 30) {
+        for (let i = 0; i < 30; i++) {
+          let currentKey = Object.keys(timeSeriesData)[i];
+          let newDataPoint = { "dateTime": currentKey, "price": parseFloat(timeSeriesData[currentKey]["4. close"] )};
+          historyArray.push(newDataPoint);
+        }
+      }
+      
+      return historyArray;
     }
 
     loadStocks(){
