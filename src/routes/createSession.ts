@@ -21,12 +21,31 @@ class CreateSessionController {
     console.log("***************");
     console.log(request.body);
     console.log("***************");
+    let name = request.body.name;
+    let balance = request.body.balance;
+    let type = request.body.type;
+    console.log(`Passed Tests name:${name} , balance:${balance} , type:${type}`);
 
+    if(name == null || balance == null || type == null){
+      console.log(">>> Error: didn't get enough paramaters");
+      response.sendStatus(500);
+      return;
+    }
 
+    balance = parseInt(balance);
+
+    if(isNaN(balance)){
+      console.log(">>> Error: Balance isn't a number");
+      response.sendStatus(500);
+      return;
+    }
+
+    console.log(`Passed Tests name:${name} , balance:${balance} , type:${type}`);
     let sessionData: SessionDataModel = {
       dateCreated: fbAdmin.firestore.FieldValue.serverTimestamp(),
-      type: "private",
-      startingBalance: 10000
+      name: name,
+      type: type,
+      startingBalance: balance
     }
 
     let sessionUserData: SessionUserDataModel = {
