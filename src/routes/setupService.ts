@@ -17,7 +17,23 @@ export class SetupService {
     savedStockHistory = new Map();
 
     constructor(){
+      this.loadStockHistory();
    
+    }
+
+  loadStockHistory() {
+    let dbRef = db.collection("StockHistory")
+    let allCities = dbRef.get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          console.log(doc.data().history);
+          this.savedStockHistory.set(doc.id,doc.data().history); // Saving the history data
+        });
+      })
+      .catch(err => {
+        console.log('Error getting documents', err);
+      });
+
     }
 
   getStockDataForSymbol(symbol: string, name: string): Promise<any> {
@@ -110,13 +126,8 @@ export class SetupService {
   uploadStockHistory(symbol: string, stockHistory): Promise<void> {
     let batch = db.batch();
     let stockHistoryCollectionRef = db.collection("StockHistory").doc(symbol);
-    let historyListRef = stockHistoryCollectionRef.collection("Stock History");
-    for (let i = 0; i < 30; i++) {
-      let historyEntry = historyListRef.doc(stockHistory[i]["dateTime"]);
-      batch.set(historyEntry, stockHistory[i]);
-    }
-
-    batch.set(stockHistoryCollectionRef,{"updated":fbAdmin.firestore.FieldValue.serverTimestamp()});
+    
+    batch.set(stockHistoryCollectionRef,{"history":stockHistory});
 
     return new Promise((resolve, reject) => {
       batch.commit().then(() => {
@@ -130,7 +141,4 @@ export class SetupService {
   }
 
 
-    loadStocks(){
-  
-    }
 }

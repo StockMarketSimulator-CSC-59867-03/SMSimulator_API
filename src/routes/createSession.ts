@@ -44,14 +44,12 @@ class CreateSessionController {
     .then((data)=>{
       let stockFields = data["stockField"];
       let stockHistory = data["stockHistory"];
-      console.log(stockFields);
-      console.log(stockHistory);
+  
       // Need to check if any of the above are null or empty
 
       let batch = db.batch();
 
       console.log("Created Session");
-      console.log(stockFields);
       let stockDocRef = sessionRef.collection("Stocks").doc(stockFields["symbol"]);
       batch.set(stockDocRef, stockFields);
       for (let i = 0; i < 30; i++) {
