@@ -12,11 +12,15 @@ class CreateSessionController {
   private setupService: SetupService;
  
   constructor(setupService: SetupService) {
-    this.router.get(this.path, this.get);
+    this.router.post(this.path, this.post);
     this.setupService = setupService;
   }
  
-  get = (request, response) => {
+  post = (request, response) => {
+
+    console.log("***************");
+    console.log(request.body);
+    console.log("***************");
 
 
     let sessionData: SessionDataModel = {
