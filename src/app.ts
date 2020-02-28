@@ -17,6 +17,7 @@ import IndexMiddleWare, * as indexRouter from './routes/index';
 import * as usersRouter from './routes/users';
 import * as testAPIRouter from './routes/testAPI';
 import CreateSessionController from './routes/createSession';
+import AddStockToSessionController from './routes/addStocksToSession';
 import { SetupService } from './routes/setupService';
 
 
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var setupService = new SetupService();
 var createSessionController = new CreateSessionController(setupService);
+var addStockToSessionController = new AddStockToSessionController(setupService);
 
 app.use('/', indexRouter.default);
 
@@ -41,6 +43,8 @@ app.use('/users', usersRouter.default);
 app.use("/testAPI", testAPIRouter.default);
 
 app.use("/createSession", createSessionController.router);
+
+app.use("/addStocks", addStockToSessionController.router)
 
 
 // catch 404 and forward to error handler
