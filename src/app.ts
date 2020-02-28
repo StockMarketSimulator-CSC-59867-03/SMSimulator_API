@@ -36,6 +36,15 @@ var setupService = new SetupService();
 var createSessionController = new CreateSessionController(setupService);
 var addStockToSessionController = new AddStockToSessionController(setupService);
 
+const cors = require('cors');
+const corsOptions = {
+	origin: 'https://aqueous-sands-65858.herokuapp.com',
+	optionsSuccessStatus: 200
+}
+
+app.use(cors(corsOptions));
+app.options('*', cors());
+
 app.use('/', indexRouter.default);
 
 app.use('/users', usersRouter.default);
@@ -64,7 +73,6 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
 });
 
 console.log("5");
