@@ -63,29 +63,8 @@ class CreateSessionController {
     batch.set(userAdminRef, sessionUserData);
 
     batch.commit()
-    .then(() => this.setupService.getStockDataForSymbol("MSFT", "Microsoft"))
-    .then((data)=>{
-      let stockFields = data["stockField"];
-      let stockHistory = data["stockHistory"];
-  
-      // Need to check if any of the above are null or empty
-
-      let batch = db.batch();
-
-      console.log("Created Session");
-      let stockDocRef = sessionRef.collection("Stocks").doc(stockFields["symbol"]);
-      batch.set(stockDocRef, stockFields);
-      for (let i = 0; i < 30; i++) {
-        let historyEntry = stockDocRef.collection("Stock History").doc();
-        batch.set(historyEntry, stockHistory[i]);
-      }
-
-      batch.commit().then(() => {
-        console.log("Successfully Created Session");
-        response.send(200);
-      });
-
-      console.log(stockHistory);
+    .then(() => {
+      response.status(200).send(sessionRef.id);
     })
     .catch((err) => {
       console.log(err);
