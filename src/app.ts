@@ -37,13 +37,8 @@ var createSessionController = new CreateSessionController(setupService);
 var addStockToSessionController = new AddStockToSessionController(setupService);
 
 const cors = require('cors');
-const corsOptions = {
-	origin: 'https://aqueous-sands-65858.herokuapp.com',
-	optionsSuccessStatus: 200
-}
 
-app.use(cors(corsOptions));
-app.options('*', cors());
+app.use(cors({ origin: true, credentials: true }));
 
 app.use('/', indexRouter.default);
 
