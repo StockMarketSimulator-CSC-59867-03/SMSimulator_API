@@ -1,7 +1,7 @@
 import { StockDataModel } from "./models/stockData.model";
 import { rejects } from "assert";
 
-let  apiKey =  require('../../keys/stockAPIKey.json')["apiKey"];
+let  apiKey =  process.env.STOCK_API_KEY;
 
 
 var request = require('request');

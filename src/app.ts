@@ -6,10 +6,10 @@ var logger = require('morgan');
 
 
 var admin = require('firebase-admin');
-let  serviceAccount =  require('../keys/stock-market-sim-firebase-adminsdk.json');
+let  serviceAccount =  process.env.FIREBASE_API_KEY;
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount)
+  credential: admin.credential.cert(JSON.parse(serviceAccount))
 });
 
 
