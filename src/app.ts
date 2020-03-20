@@ -19,8 +19,7 @@ import * as testAPIRouter from './routes/testAPI';
 import CreateSessionController from './routes/createSession';
 import AddStockToSessionController from './routes/addStocksToSession';
 import { SetupService } from './routes/setupService';
-
-
+import Broker from './routes/broker';
 
 
 var app = express();
@@ -35,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 var setupService = new SetupService();
 var createSessionController = new CreateSessionController(setupService);
 var addStockToSessionController = new AddStockToSessionController(setupService);
+var broker = new Broker ();
 
 const cors = require('cors');
 
@@ -48,7 +48,9 @@ app.use("/testAPI", testAPIRouter.default);
 
 app.use("/createSession", createSessionController.router);
 
-app.use("/addStocks", addStockToSessionController.router)
+app.use("/addStocks", addStockToSessionController.router);
+
+app.use("/broker", broker.router);
 
 
 // catch 404 and forward to error handler
