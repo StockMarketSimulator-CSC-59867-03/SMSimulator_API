@@ -20,10 +20,15 @@ let  serviceAccount =  process.env.FIREBASE_API_KEY;
 to
 let  serviceAccount =  require('../keys/stock-market-sim-firebase-adminsdk.json');
 
+
 in line 12, change
+
 credential: admin.credential.cert(JSON.parse(serviceAccount))
+
 to
+
 credential: admin.credential.cert(serviceAccount)
+
 
 In src/routes/setupService.ts
 in line 4, change
