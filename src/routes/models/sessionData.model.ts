@@ -3,4 +3,5 @@ export interface SessionDataModel {
     name: String;
     type: String;
     startingBalance: Number; 
+    ownerID: String;
 }

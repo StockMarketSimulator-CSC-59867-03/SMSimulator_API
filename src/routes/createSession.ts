@@ -24,6 +24,7 @@ class CreateSessionController {
     let name = request.body.name;
     let balance = request.body.balance;
     let type = request.body.type;
+    let ownerID = request.body.ownerID;
     console.log(`Passed Tests name:${name} , balance:${balance} , type:${type}`);
 
     if(name == null || balance == null || type == null){
@@ -45,7 +46,8 @@ class CreateSessionController {
       dateCreated: fbAdmin.firestore.FieldValue.serverTimestamp(),
       name: name,
       type: type,
-      startingBalance: balance
+      startingBalance: balance,
+      ownerID: ownerID
     }
 
     let sessionUserData: SessionUserDataModel = {
