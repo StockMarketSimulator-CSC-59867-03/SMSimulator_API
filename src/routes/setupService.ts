@@ -50,7 +50,7 @@ export class SetupService {
           let stockField: StockDataModel = {
             symbol: symbol,
             name: name,
-            price: 1312312, //stockHistory[0]["price"]
+            price: stockHistory[0]["price"],
             sector: "Tech"
           }
           return resolve({"stockField":stockField, "stockHistory":stockHistory});

@@ -43,11 +43,9 @@ class AddStockToSessionController {
           let stockDocRef = sessionRef
             .collection("Stocks")
             .doc(stockFields["symbol"]);
-          batch.set(stockDocRef, stockFields);
-          for (let i = 0; i < 30; i++) {
             let historyEntry = stockDocRef.collection("Stock History").doc();
-            batch.set(historyEntry, stockHistory[i]);
-          }
+            batch.set(historyEntry, {data: stockHistory});
+          batch.set(stockDocRef, stockFields);
 
           return new Promise((resolve, reject) => {
             batch
