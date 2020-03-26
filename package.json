@@ -2,7 +2,11 @@
   "name": "smsimulator-api",
   "version": "0.0.0",
   "private": true,
-  "scripts": { "start": "tsc && node dist/www.js" },
+  "scripts": {
+    "tsc": "tsc",
+    "start": "node dist/www.js",
+    "postinstall": "npm run tsc"
+  },
   "dependencies": {
     "@types/node": "^13.7.1",
     "@types/uuid": "^3.4.7",
