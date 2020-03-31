@@ -43,13 +43,8 @@ class CreateSessionController {
 
     console.log(`Passed Tests name:${name} , balance:${balance} , type:${type}`);
 
-    let joinKey = "";
-    if(type == "private"){
-      let joinKey = Math.random().toString(36).substring(10);
-    }
+    let joinKey = Math.random().toString(36).substring(2);
 
-
-    console.log("private key is: " + joinKey);
     let sessionData: SessionDataModel = {
       dateCreated: fbAdmin.firestore.FieldValue.serverTimestamp(),
       name: name,
