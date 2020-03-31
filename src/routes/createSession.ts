@@ -42,13 +42,31 @@ class CreateSessionController {
     }
 
     console.log(`Passed Tests name:${name} , balance:${balance} , type:${type}`);
-    let sessionData: SessionDataModel = {
-      dateCreated: fbAdmin.firestore.FieldValue.serverTimestamp(),
-      name: name,
-      type: type,
-      startingBalance: balance,
-      ownerID: ownerID
+
+    let joinKey = Math.random().toString(36).substring(20);
+
+    // separate public from private
+    if(type == "public"){
+      let sessionData: SessionDataModel = {
+        dateCreated: fbAdmin.firestore.FieldValue.serverTimestamp(),
+        name: name,
+        type: type,
+        startingBalance: balance,
+        ownerID: ownerID,
+        joinKey: ""
+      }
+    } else {
+      let sessionData: SessionDataModel = {
+        dateCreated: fbAdmin.firestore.FieldValue.serverTimestamp(),
+        name: name,
+        type: type,
+        startingBalance: balance,
+        ownerID: ownerID,
+        joinKey: joinKey
+      }
     }
+
+
 
     let sessionUserData: SessionUserDataModel = {
       id:"PLACEHOLDER ID",
