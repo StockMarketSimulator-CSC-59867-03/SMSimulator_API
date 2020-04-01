@@ -1,7 +1,7 @@
 import { StockDataModel } from "./models/stockData.model";
 import { rejects } from "assert";
 
-let  apiKey =  process.env.STOCK_API_KEY;
+let apiKey = process.env.STOCK_API_KEY;
 
 
 var request = require('request');
@@ -10,7 +10,11 @@ const fbAdmin = require('firebase-admin');
 const db = fbAdmin.firestore();
 
 
-
+// Format is YYYY-MM-DD
+function dateStringToMS(dateString){
+  let date = new Date(dateString.split("-"));
+  return date.getTime();
+}
 
 export class SetupService {
     savedStockData = new Map();
@@ -108,6 +112,8 @@ export class SetupService {
         return stockData;
     }
 
+    
+
     parseStockHistory(data){
 
       let historyArray = [];
@@ -115,7 +121,8 @@ export class SetupService {
       if (Object.keys(timeSeriesData).length >= 30) {
         for (let i = 0; i < 30; i++) {
           let currentKey = Object.keys(timeSeriesData)[i];
-          let newDataPoint = { "dateTime": currentKey, "price": parseFloat(timeSeriesData[currentKey]["4. close"] )};
+          console.log(dateStringToMS(currentKey));
+          let newDataPoint = { "dateTime": dateStringToMS(currentKey), "price": parseFloat(timeSeriesData[currentKey]["4. close"] )};
           historyArray.push(newDataPoint);
         }
       }
