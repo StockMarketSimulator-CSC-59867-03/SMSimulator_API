@@ -65,7 +65,7 @@ class CreateSessionController {
     let sessionRef = db.collection("Sessions").doc();
     batch.set(sessionRef, sessionData);
 
-    let userAdminRef = sessionRef.collection("Users").doc();
+    let userAdminRef = sessionRef.collection("Users").doc(ownerID);
     batch.set(userAdminRef, sessionUserData);
 
     batch.commit()
