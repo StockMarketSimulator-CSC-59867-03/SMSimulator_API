@@ -56,7 +56,7 @@ class CreateSessionController {
 
     let sessionUserData: SessionUserDataModel = {
       id:"PLACEHOLDER ID",
-      liquid: 10000,
+      liquid: balance,
       type: "Admin"
     }
 
