@@ -43,7 +43,7 @@ class AddStockToSessionController {
           let stockDocRef = sessionRef
             .collection("Stocks")
             .doc(stockFields["symbol"]);
-            let historyEntry = stockDocRef.collection("Stock History").doc();
+            let historyEntry = stockDocRef.collection("Stock History").doc("Initial");
             batch.set(historyEntry, {data: stockHistory});
           batch.set(stockDocRef, stockFields);
 

@@ -10,6 +10,8 @@ let serviceAccount = process.env.FIREBASE_API_KEY;
 
 admin.initializeApp({
   credential: admin.credential.cert(JSON.parse(serviceAccount))
+
+
 });
 
 
