@@ -72,7 +72,7 @@ class CreateSessionController {
     .then(() => {
       // after creating session, add this sessionID to corresponding user's session array
       db.collection("User").doc(ownerID).update({
-        sessions: fbAdmin.firestore.FieldValue.arrayUnion("sessionTest")
+        sessions: fbAdmin.firestore.FieldValue.arrayUnion(sessionRef.id)
       })
 
       response.status(200).send(sessionRef.id);
