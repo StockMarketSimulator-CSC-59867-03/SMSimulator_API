@@ -3,4 +3,5 @@ export interface StockDataModel {
     name: string;
     price: Number;
     sector: string;
+    favorability?: number;
 }

@@ -6,7 +6,7 @@ var logger = require('morgan');
 
 
 var admin = require('firebase-admin');
-let serviceAccount = process.env.FIREBASE_API_KEY;
+let serviceAccount = process.env.FIREBASE_API_KEY
 
 admin.initializeApp({
   credential: admin.credential.cert(JSON.parse(serviceAccount))

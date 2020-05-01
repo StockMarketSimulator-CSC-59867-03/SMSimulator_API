@@ -40,22 +40,40 @@ export class SetupService {
 
     }
 
-  getStockDataForSymbol(symbol: string, name: string): Promise<any> {
+    getStockFieldData(symbol: string) : Promise<any> {
+      return new Promise((resolve,reject)=>{
+        var docRef = db.collection("Stocks").doc(symbol);
+        docRef.get().then(function(doc) {
+          if (doc.exists) {
+              console.log("Document data:", doc.data());
+              resolve(doc.data());
+          } else {
+              reject("No docment exist given symbol");
+          }
+      }).catch(function(error) {
+          reject(error);
+      });
+      });
+    }
+
+   getStockDataForSymbol(symbol: string, name: string): Promise<any> {
 
     var url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${symbol}&apikey=${apiKey}`;
 
 
 
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
 
       if (this.savedStockHistory.has(symbol)) {
         let stockHistory = this.savedStockHistory.get(symbol);
+        let stockFieldData = await this.getStockFieldData(symbol);
         if (stockHistory.length > 0) {
           let stockField: StockDataModel = {
             symbol: symbol,
-            name: name,
+            name: stockFieldData["name"],
             price: stockHistory[0]["price"],
-            sector: "Tech"
+            sector:stockFieldData["sector"].toLowerCase(),
+            favorability: 10
           }
           return resolve({"stockField":stockField, "stockHistory":stockHistory});
         }
@@ -97,16 +115,17 @@ export class SetupService {
     });
     }
 
-    parseStockData(data, symbol, name){
+    async parseStockData(data, symbol, name){
         let timeSeriesData = data["Time Series (Daily)"];
         let currentDayKey = Object.keys(timeSeriesData)[0];
         let rawStockData = timeSeriesData[currentDayKey];
-        
+        let stockFieldData = await this.getStockFieldData(symbol);
         let stockData: StockDataModel = {
             symbol: symbol,
-            name: name,
+            name: stockFieldData["name"],
             price: parseFloat(rawStockData["1. open"]),
-            sector: "Tech"
+            sector: stockFieldData["sector"].toLowerCase(),
+            favorability: 10
         }
 
         return stockData;
